@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton mMoveLeftButton;
     private ImageButton mMoveUpButton;
     private ImageButton mMoveDownButton;
-    private ImageButton mControlSingleServoMotorButton;
+    private ImageButton mControlFrontLightButton;
     private ImageButton mControlBothServoMotorButton;
 
     /*
@@ -100,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private boolean isModeAutoEnabled = false;
     private boolean isRobotEnabled = false;
+    private boolean isFrontLightOn = false;
+
 
     private boolean doubleBackToExitPressedOnce = false;
 
@@ -131,39 +134,20 @@ public class MainActivity extends AppCompatActivity {
                      */
                     case R.id.btn1s:
                         System.out.println("BackLight");
-                        imageButton.setImageDrawable(getDrawable(R.drawable.btn_2servo_on));
-                        publishMessage(Constants.CAR_LIGHT_TOPIC, "F" );
-
-                        break;
-
-
-                    /*
-                        Back Lights
-                     */
-                    case R.id.btn2s:
-
-                            System.out.println("BackLight");
+                        if (isFrontLightOn) {
+                            imageButton.setImageDrawable(getDrawable(R.drawable.btn_2servo_off));
+                            publishMessage(Constants.CAR_LIGHT_TOPIC, "OFF" );
+                            isFrontLightOn = false;
+                        }else{
                             imageButton.setImageDrawable(getDrawable(R.drawable.btn_2servo_on));
-                            publishMessage(Constants.CAR_LIGHT_TOPIC, "B" );
+                            publishMessage(Constants.CAR_LIGHT_TOPIC, "ON" );
+                            isFrontLightOn = true;
+                        }
 
                         break;
 
 
-                        /*
-                            Changing the robot states
-                         */
-                    case R.id.robot_state:
-                        System.out.println("SWITCH ROBOT_STATE");
-                        publishMessage(Constants.CAR_STATE_TOPIC, isRobotEnabled ? "ON": "OFF");
-                        isRobotEnabled = !isRobotEnabled;
 
-                        break;
-                    case R.id.robot_switch_mode:
-                        System.out.println("SWITCH ROBOT_ MODE");
-                        publishMessage(Constants.CAR_MODE_TOPIC, isModeAutoEnabled ? "ON": "OFF");
-                        isModeAutoEnabled = !isModeAutoEnabled;
-
-                        break;
 
                         /*
                             Direction/Move controls actions
@@ -227,8 +211,8 @@ public class MainActivity extends AppCompatActivity {
                             constraintLayout.setBackgroundColor(Color.rgb(15, 132, 245));
                         } else {
                             System.out.println("LEFT");
-                            publishMessage(Constants.CAR_MOVE_TOPIC, mPrefs.getString(res.getString(R.string.key_pref_pos_up),
-                                    res.getString(R.string.pref_default_pos_up)));
+                            publishMessage(Constants.CAR_MOVE_TOPIC, mPrefs.getString(res.getString(R.string.key_pref_pos_left),
+                                    res.getString(R.string.pref_default_pos_left)));
                             isHorizontalVal = 'L';
                             constraintLayout.setBackgroundColor(Color.rgb(105, 92, 25));
                         }
@@ -304,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             // Sending data
-            //(Integer.toString(progress));
+            publishMessage(Constants.CAR_SPEED_TOPIC, Integer.toString(progress));
         }
 
         @Override
@@ -419,7 +403,7 @@ public class MainActivity extends AppCompatActivity {
             mqttAndroidClient.publish(topicToPublish, message);
 
              TextView textView = findViewById(R.id.textView);
-                    textView.setText("Message Published");
+                    textView.setText("Message Published to "+ topicToPublish + " : {"+msg+"}");
 
             if (!mqttAndroidClient.isConnected()) {
                     textView.setText("messages in buffer");
@@ -557,7 +541,7 @@ public class MainActivity extends AppCompatActivity {
         mMoveLeftButton = findViewById(R.id.leftButton);
         mMoveRightButton = findViewById(R.id.rightButton);
 
-        mControlSingleServoMotorButton = findViewById(R.id.btn1s);
+        mControlFrontLightButton = findViewById(R.id.btn1s);
         mControlBothServoMotorButton = findViewById(R.id.btn2s);
 
         mSpeedSeekBar = findViewById(R.id.speedSeekBar);
@@ -579,11 +563,28 @@ public class MainActivity extends AppCompatActivity {
         mMoveRightButton.setOnTouchListener(mControlsButtonOnTouchListener);
 
 
-        mModeSwitch.setOnTouchListener(mControlsButtonOnTouchListener);
-        mStateSwitch.setOnTouchListener(mControlsButtonOnTouchListener);
+        mModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-        mControlSingleServoMotorButton.setOnTouchListener(mControlsButtonOnTouchListener);
-        mControlBothServoMotorButton.setOnTouchListener(mControlsButtonOnTouchListener);
+                System.out.println("SWITCH ROBOT_ MODE");
+                publishMessage(Constants.CAR_MODE_TOPIC, isModeAutoEnabled ? "OFF": "ON");
+                isModeAutoEnabled = !isModeAutoEnabled;
+             }
+        });
+
+        mStateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                System.out.println("SWITCH ROBOT_STATE");
+                publishMessage(Constants.CAR_STATE_TOPIC, isRobotEnabled ? "MANUAL": "AUTO");
+                isRobotEnabled = !isRobotEnabled;
+
+            }
+        });
+
+        mControlFrontLightButton.setOnTouchListener(mControlsButtonOnTouchListener);
+
+        // mControlBothServoMotorButton.setOnTouchListener(mControlsButtonOnTouchListener);
 
         mSpeedSeekBar.setOnSeekBarChangeListener(mSpeedSeekBarListener);
 
