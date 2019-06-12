@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton mMoveUpButton;
     private ImageButton mMoveDownButton;
     private ImageButton mControlFrontLightButton;
-    private ImageButton mControlBothServoMotorButton;
 
     /*
         Seekbar Control for robot speed
@@ -429,18 +428,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.connect_scan_menu_item:
-            case R.id.action_connect_scan: {
-                // openConnectActivity();
-                return true;
-            }
+
             case R.id.full_screen_menu_item:
             case R.id.action_full_screen: {
                 hideSystemUI();
-                return true;
-            }
-            case R.id.discoverable: {
-                // TODO: 2/13/19
                 return true;
             }
             case R.id.action_settings: {
@@ -542,7 +533,6 @@ public class MainActivity extends AppCompatActivity {
         mMoveRightButton = findViewById(R.id.rightButton);
 
         mControlFrontLightButton = findViewById(R.id.btn1s);
-        mControlBothServoMotorButton = findViewById(R.id.btn2s);
 
         mSpeedSeekBar = findViewById(R.id.speedSeekBar);
 
@@ -584,7 +574,6 @@ public class MainActivity extends AppCompatActivity {
 
         mControlFrontLightButton.setOnTouchListener(mControlsButtonOnTouchListener);
 
-        // mControlBothServoMotorButton.setOnTouchListener(mControlsButtonOnTouchListener);
 
         mSpeedSeekBar.setOnSeekBarChangeListener(mSpeedSeekBarListener);
 

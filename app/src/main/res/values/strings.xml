@@ -6,19 +6,18 @@
     <string name="action_settings">Settings</string>
     <string name="action_about">About Us</string>
     <string name="action_full_screen">Full Screen</string>
-    <string name="connect_device">Connect a Device</string>
-    <string name="discoverable">Make Discoverable</string>
     <string name="action_help">Help</string>
 
     <!--  Options  -->
-    <string name="robot_mode_text"> Mode</string>
+    <string name="robot_mode_text"> Mode </string>
     <string name="robot_state_text">Power</string>
+    <string name="robot_front_led_state_text">Front LED State</string>
 
     <!--  Context Menu  -->
     <!--   Bluetooth  -->
     <string name="send">Send</string>
     <string name="not_connected">You are not connected to a device</string>
-    <string name="bt_not_enabled_leaving">Bluetooth was not enabled. Leaving App.</string>
+    <string name="bt_not_enabled_leaving">MQTT was not enabled. Leaving App.</string>
     <string name="title_connecting">connecting &#8230;</string>
     <string name="title_connected_to">connected to <xliff:g id="device_name">%1$s</xliff:g> </string>
     <string name="title_not_connected">not connected</string>

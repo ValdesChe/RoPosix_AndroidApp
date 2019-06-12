@@ -4,24 +4,11 @@
     tools:context="com.ensate.robotixcarrc.MainActivity">
 
     <item
-        android:id="@+id/connect_scan_menu_item"
-        android:icon="@drawable/ic_bluetooth_searching_black_24dp"
-        android:title="@string/connect_device"
-        app:showAsAction="ifRoom" />
-    <item
         android:id="@+id/full_screen_menu_item"
         android:icon="@drawable/ic_fullscreen_24dp"
         android:title="@string/action_full_screen"
         app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/action_connect_scan"
-        android:title="@string/connect_device"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/discoverable"
-        android:title="@string/discoverable"
-        app:showAsAction="never" />
     <item
         android:id="@+id/action_full_screen"
         android:orderInCategory="100"
